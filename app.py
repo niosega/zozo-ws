@@ -11,17 +11,25 @@ zoe.getPersonnalInfo()
 
 @app.route("/")
 def index():
-    status = zoe.batteryStatus()["data"]["attributes"]
-    infos = []
-    infos.append(("Niveau Batterie", status["batteryLevel"]))
-    infos.append(("Autonomie", status["batteryAutonomy"]))
-    infos.append(("Branché ?", "Oui" if status["plugStatus"] == 1 else "Non"))
-    infos.append(("En charge ?", "Oui" if status["chargingStatus"] == 1.0 else "Non"))
-    infos.append(("Temps restant", str(datetime.timedelta(minutes=status["chargingRemainingTime"]))))
+    idx = 0
+    while idx < 2:
+        try:
+            status = zoe.batteryStatus()["data"]["attributes"]
+            infos = []
+            infos.append(("Niveau Batterie", status["batteryLevel"]))
+            infos.append(("Autonomie", status["batteryAutonomy"]))
+            infos.append(("Branché ?", "Oui" if status["plugStatus"] == 1 else "Non"))
+            infos.append(("En charge ?", "Oui" if status["chargingStatus"] == 1.0 else "Non"))
+            infos.append(("Temps restant", str(datetime.timedelta(minutes=status["chargingRemainingTime"]))))
 
-    loc = zoe.location()
-    lat = str(loc["data"]["attributes"]["gpsLatitude"])
-    lon = str(loc["data"]["attributes"]["gpsLongitude"])
+            loc = zoe.location()
+            lat = str(loc["data"]["attributes"]["gpsLatitude"])
+            lon = str(loc["data"]["attributes"]["gpsLongitude"])
+
+            break
+        except:
+            clean()
+        idx += 1
     return render_template("index.html", infos=infos, lat=lat, lon=lon)
 
 @app.route("/api/status")
