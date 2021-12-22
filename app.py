@@ -38,6 +38,7 @@ def location():
 @app.route("/api/clean")
 def clean():
     zoe.cleanPersonnalInfo()
+    zoe.getPersonnalInfo()
     return jsonify({"state": True})
 
 app.run(host='0.0.0.0', debug=True)
