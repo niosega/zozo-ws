@@ -6,6 +6,8 @@
     <title>ZOZO-WS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+    <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
   </head>
   <body>
     {% for (title, info) in infos%}
@@ -16,5 +18,29 @@
       </div>
     </div>
   {% endfor %}
+  <div id = "map" style = "width: auto; height:580px"></div>
+
+  <script>
+    // Creating map options
+    var mapOptions = {
+       center: [{{ lat }}, {{ lon }}],
+       zoom: 15
+    }
+
+    // Creating a map object
+    var map = new L.map('map', mapOptions);
+
+    // Creating a Layer object
+    var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+    // Adding layer to the map
+    map.addLayer(layer);
+
+    // Creating a marker
+    var marker = L.marker([{{ lat }}, {{ lon }}]);
+
+    // Adding marker to the map
+    marker.addTo(map);
+ </script>
   </body>
 </html>

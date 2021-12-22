@@ -18,7 +18,11 @@ def index():
     infos.append(("Branché ?", "Oui" if status["plugStatus"] == 1 else "Non"))
     infos.append(("En charge ?", "Oui" if status["chargingStatus"] == 1.0 else "Non"))
     infos.append(("Temps restant", str(datetime.timedelta(minutes=status["chargingRemainingTime"]))))
-    return render_template("index.html", infos=infos)
+
+    loc = zoe.location()
+    lat = str(loc["data"]["attributes"]["gpsLatitude"])
+    lon = str(loc["data"]["attributes"]["gpsLongitude"])
+    return render_template("index.html", infos=infos, lat=lat, lon=lon)
 
 @app.route("/api/status")
 def status():
